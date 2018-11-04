@@ -3,5 +3,5 @@ export default {
   gameHeight: 800,
   localStorageName: 'phaseres6webpack',
   webfonts: ['Bangers'],
-  backgroundColor: '#5533cc'
+  backgroundColor: '#008f00'
 }
