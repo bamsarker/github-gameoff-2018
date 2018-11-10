@@ -68,7 +68,7 @@ export default class extends Phaser.State {
     //   this.colorBalls.map(b => this.game.physics.arcade.collide(ball, b))
     // })
 
-    if (this.game.input.mousePointer.justReleased() && !this.cueball.isMoving()) {
+    if (this.game.input.mousePointer.justReleased() && this.ballsAreStationary()) {
       this.cueball.hit({
         x: this.game.input.mousePointer.positionDown.x - this.game.input.mousePointer.x,
         y: this.game.input.mousePointer.positionDown.y - this.game.input.mousePointer.y
@@ -76,8 +76,12 @@ export default class extends Phaser.State {
     }
   }
 
+  ballsAreStationary() {
+    return this.colorBalls.concat(this.cueball).filter(ball => !ball.isMoving()).length === this.colorBalls.length + 1
+  }
+
   render() {
-    if (this.game.input.mousePointer.isDown) {
+    if (this.game.input.mousePointer.isDown && this.ballsAreStationary()) {
       this.aimLine.clear()
       this.aimLine.drawLine(this.cueball, {
         x: this.cueball.x + (this.game.input.mousePointer.positionDown.x - this.game.input.mousePointer.x),
