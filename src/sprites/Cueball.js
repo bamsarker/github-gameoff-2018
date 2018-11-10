@@ -11,8 +11,6 @@ export default class extends Ball {
     this.body.velocity.y = pos.y * this.hitModifier;
   }
 
-  isMoving() { return Math.abs(this.body.velocity.x + this.body.velocity.y) > 0 }
-
   update() {
     if (Math.abs(this.body.velocity.x + this.body.velocity.y) > 2) {
       this.body.velocity.x *= this.drag;

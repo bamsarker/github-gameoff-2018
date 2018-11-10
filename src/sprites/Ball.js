@@ -18,6 +18,8 @@ export default class extends Phaser.Sprite {
     this.game = game
   }
 
+  isMoving() { return Math.abs(this.body.velocity.x + this.body.velocity.y) > 0 }
+
   update() {
     if (Math.abs(this.body.velocity.x + this.body.velocity.y) < 2) {
       this.body.velocity.x = 0;
