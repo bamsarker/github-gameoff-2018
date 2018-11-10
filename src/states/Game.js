@@ -5,6 +5,7 @@ import Cueball from '../sprites/Cueball'
 import AimLine from '../sprites/AimLine'
 import lang from '../lang'
 import Colorball from '../sprites/Colorball';
+import config from '../config';
 
 export default class extends Phaser.State {
   init() { }
@@ -33,16 +34,10 @@ export default class extends Phaser.State {
       asset: 'ball'
     })
 
-    this.colorBalls = [
-      0x08BDBD,
-      0xF21B3F,
-      0xFF9914,
-      0xABFF4F,
-      0x424342
-    ].map((color) => new Colorball({
+    this.colorBalls = config.ballColors.map((color, i) => new Colorball({
       game: this.game,
-      x: this.world.randomX,
-      y: this.world.randomY,
+      x: config.getInitialLayoutPos(i, config.ballColors.length).x,
+      y: config.getInitialLayoutPos(i, config.ballColors.length).y,
       asset: 'ball',
       color
     }))
