@@ -26,6 +26,8 @@ export default class extends Phaser.State {
     this.game.physics.box2d.setBoundsToWorld();
     this.game.physics.box2d.friction = 0;
     this.game.physics.box2d.restitution = 0.8;
+    this.game.physics.box2d.velocityIterations = 4;
+    // this.game.physics.box2d.velocityThreshold = 0;
 
     this.cueball = new Cueball({
       game: this.game,
@@ -34,13 +36,16 @@ export default class extends Phaser.State {
       asset: 'ball'
     })
 
-    this.colorBalls = config.ballColors.map((color, i) => new Colorball({
-      game: this.game,
-      x: config.getInitialLayoutPos(i, config.ballColors.length).x,
-      y: config.getInitialLayoutPos(i, config.ballColors.length).y,
-      asset: 'ball',
-      color
-    }))
+    this.colorBalls = config.ballColors.map((color, i) => {
+      const pos = config.getInitialLayoutPos(i, config.ballColors.length)
+      return new Colorball({
+        game: this.game,
+        x: pos.x,
+        y: pos.y,
+        asset: 'ball',
+        color
+      })
+    })
 
     this.game.input.addPointer();
     this.game.input.addPointer();
@@ -57,11 +62,26 @@ export default class extends Phaser.State {
 
   }
 
+  checkForMatches(balls) {
+    return balls.map(ball => ball.closeBallsOfTheSameColor(balls)).filter(group => group.length === 3)
+  }
+
   update() {
     // this.colorBalls.map(ball => {
     //   this.game.physics.arcade.collide(ball, this.cueball)
     //   this.colorBalls.map(b => this.game.physics.arcade.collide(ball, b))
     // })
+
+    // if (this.ballsAreStationary()) {
+    //   const ballGroups = this.checkForMatches(this.colorBalls)
+
+    //   if (ballGroups.length > 0) {
+    //     ballGroups.forEach(group => group.forEach(ball => {
+    //       ball.destroy()
+    //       this.colorBalls = this.colorBalls.filter(b => b !== ball)
+    //     }))
+    //   }
+    // }
 
     if (this.game.input.mousePointer.justReleased() && this.ballsAreStationary()) {
       this.cueball.hit({
