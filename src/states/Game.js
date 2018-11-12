@@ -29,6 +29,8 @@ export default class extends Phaser.State {
     this.game.physics.box2d.velocityIterations = 4;
     // this.game.physics.box2d.velocityThreshold = 0;
 
+    this.numHits = 0
+
     this.cueball = new Cueball({
       game: this.game,
       x: this.world.centerX,
@@ -72,18 +74,19 @@ export default class extends Phaser.State {
     //   this.colorBalls.map(b => this.game.physics.arcade.collide(ball, b))
     // })
 
-    // if (this.ballsAreStationary()) {
-    //   const ballGroups = this.checkForMatches(this.colorBalls)
+    if (this.ballsAreStationary() && this.numHits > 0) {
+      const ballGroups = this.checkForMatches(this.colorBalls)
 
-    //   if (ballGroups.length > 0) {
-    //     ballGroups.forEach(group => group.forEach(ball => {
-    //       ball.destroy()
-    //       this.colorBalls = this.colorBalls.filter(b => b !== ball)
-    //     }))
-    //   }
-    // }
+      if (ballGroups.length > 0) {
+        ballGroups.forEach(group => group.forEach(ball => {
+          ball.destroy()
+          this.colorBalls = this.colorBalls.filter(b => b !== ball)
+        }))
+      }
+    }
 
     if (this.game.input.mousePointer.justReleased() && this.ballsAreStationary()) {
+      this.numHits++
       this.cueball.hit({
         x: this.game.input.mousePointer.positionDown.x - this.game.input.mousePointer.x,
         y: this.game.input.mousePointer.positionDown.y - this.game.input.mousePointer.y
